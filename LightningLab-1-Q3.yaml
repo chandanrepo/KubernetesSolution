@@ -26,3 +26,6 @@ spec:
 
            # key: special.how
   restartPolicy: Never
+  
+  # check solution by executing below command :-
+  # master $ kubectl exec -it time-check -n=dvl1987 env | grep TIME
