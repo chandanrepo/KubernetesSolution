@@ -7,7 +7,9 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels:      app: redis  template:
+    matchLabels:
+      app: redis
+  template:
     metadata:
       labels:
         app: redis
@@ -17,6 +19,9 @@ spec:
         image: redis:alpine
         ports:
         - containerPort: 6379
+        resources:
+          requests:
+            cpu: "0.2"
         volumeMounts:
            - mountPath: /redis-master-data
              name: data
