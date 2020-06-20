@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: deployment-web
+  name: deployment-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment-web
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: deployment-web
+    spec:
+      containers:
+      - image: busybox
+        name: logger-dev
+        command: ["/bin/sh", "-c"]
+        args: 
+          - while true; do
+            echo "i love cnf" >> /opt/log/input.log;
+              sleep 10;
+            done
+        volumeMounts:
+            - name: html
+              mountPath: /opt/log
+      - image: nginx
+        name: adaptor123
+        volumeMounts:
+            - name: html
+              mountPath: /opt/log
+            - name: fluentd
+              mountPath: /fluentd/etc
+      volumes:
+        - name: fluentd
+          configMap:
+            name: special-config
+        - name: html
+          emptyDir: {} 
+
+# $ kubectl exec deployment-web-5f94d6b89c-45q6x -c adaptor -- /bin/cat /tmp/log/output.log
